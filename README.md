@@ -50,6 +50,33 @@ A full-stack founder workspace for model-based valuation, financial planning, ru
 
 **Why it's different:** every number is traceable. The engine does not invent comparable-company data, and every assumption is shown next to the result.
 
+## 🖼️ Product tour
+
+The app ships in a dark theme by default, with light text on deep surfaces. Sensitive data such as your email address is browser-only and never fabricated.
+
+<div align="center">
+  <table>
+    <tr>
+      <td><b>Founder workspace</b></td>
+      <td><b>Valuation calculator</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/workspace.png" alt="Founder workspace" width="100%" /></td>
+      <td><img src="docs/screenshots/valuation.png" alt="Valuation calculator" width="100%" /></td>
+    </tr>
+    <tr>
+      <td><b>Settings</b></td>
+      <td><b>About</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/settings.png" alt="Settings" width="100%" /></td>
+      <td><img src="docs/screenshots/about.png" alt="About" width="100%" /></td>
+    </tr>
+  </table>
+</div>
+
+> **Privacy note:** blur or crop your email address (`vampirerj2@gmail.com`) in any screenshots you add to `docs/screenshots/` before committing, since this repository is public.
+
 ## 🧠 How the valuation works
 
 ```mermaid
