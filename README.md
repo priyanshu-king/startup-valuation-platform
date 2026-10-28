@@ -241,6 +241,54 @@ npm test
 npm run build
 ```
 
+## 🚀 Deploy
+
+This is a full-stack app. The frontend runs on Vercel; the FastAPI backend needs a separate host (Vercel cannot run Python/SQLite).
+
+### 1. Deploy the backend (Render, Railway, or Fly.io)
+
+Create a new web service from the `backend/` folder:
+
+| Setting | Value |
+| --- | --- |
+| Runtime | Python 3.11 |
+| Build command | `pip install -r requirements.txt` |
+| Start command | `uvicorn main:app --host 0.0.0.0 --port $PORT` |
+| Root directory | `backend` |
+
+Then run migrations once after deploy:
+
+```powershell
+python -m alembic upgrade head
+```
+
+Set these environment variables on the backend host:
+
+```
+ENVIRONMENT=production
+DEBUG=false
+SECRET_KEY=<long random string>
+CORS_ORIGINS=https://your-vercel-app.vercel.app
+```
+
+Take the backend URL (e.g. `https://startup-valuation-api.onrender.com`).
+
+### 2. Deploy the frontend on Vercel
+
+1. Push this repo to GitHub.
+2. On [vercel.com](https://vercel.com), click **Add New → Project** and import `priyanshu-king/startup-valuation-platform`.
+3. Set **Root Directory** to `frontend`.
+4. Framework preset: **Vite**.
+5. Build command: `npm ci && npm run build`
+6. Output directory: `dist`
+7. Add environment variable:
+   - `VITE_API_BASE_URL` = your backend URL from step 1 (e.g. `https://startup-valuation-api.onrender.com`)
+8. Click **Deploy**.
+
+### 3. Verify
+
+Open your Vercel URL and check `https://your-app.vercel.app/api/health` (proxied through your backend). If the health check returns OK, the frontend and backend are connected.
+
 ## License
 
 No license has been specified. Public repository visibility does not grant permission to reuse, distribute, or modify this project.
