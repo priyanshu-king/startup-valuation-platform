@@ -1,0 +1,154 @@
+/* ============================================================
+   Global Styles — AI Startup Valuation Platform
+   ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base Layer ───────────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface-900 text-white font-sans;
+    background-image: radial-gradient(
+      ellipse at top left,
+      rgba(61, 90, 241, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(139, 92, 246, 0.06) 0%,
+      transparent 50%
+    );
+    min-height: 100vh;
+  }
+
+  ::selection {
+    @apply bg-brand-500/30 text-white;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* ── Component Layer ──────────────────────────────────────── */
+@layer components {
+
+  /* Cards */
+  .card {
+    @apply bg-surface-800 rounded-2xl shadow-card;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .card-hover {
+    @apply bg-surface-800 rounded-2xl shadow-card;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    @apply transition-all duration-300;
+  }
+  .card-hover:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    @apply shadow-card-lg -translate-y-0.5;
+  }
+
+  .card-glass {
+    @apply rounded-2xl shadow-card backdrop-blur-xl;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(22, 27, 39, 0.7);
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl
+           font-semibold text-sm transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface-900
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-500 hover:bg-brand-600 text-white px-6 py-3
+           focus:ring-brand-500 shadow-glow-sm hover:shadow-glow;
+  }
+
+  .btn-secondary {
+    @apply btn text-white px-6 py-3 focus:ring-white/30;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-ghost {
+    @apply btn hover:bg-white/8 text-white/70 hover:text-white px-4 py-2;
+  }
+
+  .btn-sm   { @apply px-4 py-2 text-xs; }
+  .btn-lg   { @apply px-8 py-4 text-base; }
+
+  /* Inputs */
+  .input {
+    @apply w-full bg-surface-700 rounded-xl px-4 py-3
+           text-white placeholder-white/30 text-sm
+           focus:outline-none focus:ring-2 focus:ring-brand-500/50
+           transition-all duration-200;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .input:focus {
+    border-color: rgba(61, 90, 241, 0.5);
+  }
+
+  .label {
+    @apply block text-sm font-medium text-white/70 mb-1.5;
+  }
+
+  /* Badges */
+  .badge          { @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium; }
+  .badge-success  { @apply badge bg-emerald-500/15 text-emerald-400; border: 1px solid rgba(52,211,153,0.2); }
+  .badge-warning  { @apply badge bg-amber-500/15 text-amber-400; border: 1px solid rgba(251,191,36,0.2); }
+  .badge-error    { @apply badge bg-red-500/15 text-red-400; border: 1px solid rgba(248,113,113,0.2); }
+  .badge-info     { @apply badge bg-brand-500/15 text-brand-400; border: 1px solid rgba(61,90,241,0.2); }
+
+  /* Divider */
+  .divider        { @apply my-6; border-top: 1px solid rgba(255,255,255,0.08); }
+
+  /* Section Headers */
+  .section-title    { @apply text-2xl font-bold text-white; }
+  .section-subtitle { @apply text-white/60 text-sm mt-1; }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #3d5af1 0%, #8b5cf6 100%);
+  }
+
+  /* Status dot */
+  .status-dot       { @apply inline-block w-2 h-2 rounded-full; }
+  .status-dot-green { @apply status-dot bg-emerald-400; }
+}
+
+/* ── Utility Layer ────────────────────────────────────────── */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+}
