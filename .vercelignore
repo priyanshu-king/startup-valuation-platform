@@ -3,6 +3,8 @@
 .github
 .venv
 venv
+.cline-home
+.vercel
 __pycache__
 *.pyc
 .pytest_cache
