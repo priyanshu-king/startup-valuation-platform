@@ -243,6 +243,14 @@ npm run build
 
 ## 🚀 Deploy
 
+**Live:** <https://startup-valuation-platform.vercel.app> ·
+[health check](https://startup-valuation-platform.vercel.app/api/health) ·
+[API docs](https://startup-valuation-platform.vercel.app/api/docs)
+
+The Vercel project is connected to this GitHub repository (production branch `main`),
+so every merge to `main` ships a new production deployment. The database is a hosted
+Supabase PostgreSQL project (`us-east-1`) reached through the Supavisor pooler.
+
 This repository is ready to deploy as a **single Vercel project**: Vercel builds the
 Vite frontend to static files and runs the FastAPI backend as a Python serverless
 function (`api/index.py`). Because both are served from the same origin, the browser
