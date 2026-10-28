@@ -1,35 +1,72 @@
 <div align="center">
 
-# Startup Valuation
+<img src="docs/banner.svg" alt="Startup Valuation Platform" width="100%" />
 
-### A clearer view of your startup's value—and the assumptions behind it.
+### Know what your startup is worth, and exactly why.
 
-An interactive founder workspace for model-based startup valuation, practical financial planning, and execution roadmaps.
+A full-stack founder workspace for model-based valuation, financial planning, runway, fundraising, and execution roadmaps.
 
 <p>
-  <img src="https://img.shields.io/badge/React-18-149ECA?logo=react&logoColor=white" alt="React 18" />
-  <img src="https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white" alt="Vite 5" />
-  <img src="https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white" alt="FastAPI 0.115" />
-  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python 3.10 or later" />
-  <img src="https://img.shields.io/badge/License-Not%20specified-lightgrey" alt="License not specified" />
+  <img src="https://img.shields.io/badge/React-18-149ECA?style=for-the-badge&logo=react&logoColor=white" alt="React 18" />
+  <img src="https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 5" />
+  <img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+" />
+  <img src="https://img.shields.io/badge/SQLAlchemy-2.0-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white" alt="SQLAlchemy 2.0" />
+  <img src="https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 3" />
+</p>
+
+<p>
+  <a href="https://github.com/priyanshu-king/startup-valuation-platform/actions"><img src="https://github.com/priyanshu-king/startup-valuation-platform/actions/workflows/ci.yml/badge.svg" alt="CI status" /></a>
+  <img src="https://img.shields.io/github/last-commit/priyanshu-king/startup-valuation-platform?color=7c3aed" alt="Last commit" />
+  <img src="https://img.shields.io/github/repo-size/priyanshu-king/startup-valuation-platform?color=0891b2" alt="Repo size" />
+</p>
+
+<p>
+  <a href="#-features">Features</a> ·
+  <a href="#-architecture">Architecture</a> ·
+  <a href="#-quick-start">Quick start</a> ·
+  <a href="#-api-at-a-glance">API</a> ·
+  <a href="#-security">Security</a> ·
+  <a href="#-tests">Tests</a>
 </p>
 
 </div>
 
 > **Important:** Valuations and financial projections are estimates based on user-provided inputs and disclosed model assumptions. They are not certified appraisals, investment advice, or guarantees.
 
-## What it does
+---
 
-Startup Valuation brings early-stage planning tools together in one founder-focused workspace:
+## ✨ Features
 
-- **Valuation:** a guided profile, financials, business, and market intake followed by a deterministic estimate, method breakdown, assumptions, and financial signals.
-- **Financial planning and runway:** editable monthly forecasts with revenue, costs, net cash flow, and closing cash.
-- **Fundraising and cap table:** basic priced-round dilution and ownership calculations.
-- **Investor readiness and reports:** a founder checklist plus owner-scoped report history and on-demand PDF downloads.
-- **Startup roadmaps:** deterministic, editable plans tailored to business type and stage. Roadmap generation is a template-based draft, not an AI service.
-- **Founder workspace and settings:** account-backed report access alongside clearly identified browser-only preferences.
+| | Module | What you get |
+| :-: | --- | --- |
+| 📊 | **Valuation engine** | Guided profile, financials, business and market intake, then a deterministic estimate with method breakdown, assumptions and low/base/high scenarios. |
+| 💸 | **Financial planner and runway** | Editable monthly forecasts: revenue, costs, net cash flow and closing cash. |
+| 🤝 | **Fundraising and cap table** | Priced-round dilution and ownership calculations. |
+| ✅ | **Investor readiness** | A founder checklist to see how prepared you are. |
+| 📄 | **Reports and PDF** | Owner-scoped report history with on-demand PDF downloads. |
+| 🗺️ | **Startup roadmaps** | Editable plans tailored to business type and stage (template-based drafts, not an AI service). |
+| ⚙️ | **Workspace and settings** | Account-backed reports alongside clearly marked browser-only preferences. |
 
-## Product architecture
+**Why it's different:** every number is traceable. The engine does not invent comparable-company data, and every assumption is shown next to the result.
+
+## 🧠 How the valuation works
+
+```mermaid
+flowchart LR
+    A[Founder inputs] --> B[Revenue multiple by stage]
+    A --> C[Growth-adjusted multiple]
+    A --> D[Berkus-inspired, pre-revenue]
+    B --> E[Average of applicable methods]
+    C --> E
+    D --> E
+    A --> F[Market ceiling: 25% of SOM]
+    E --> G[Base value]
+    G --> H[Low 75% / High 135%]
+    F -. sanity cap .-> G
+```
+
+## 🏗️ Architecture
 
 ```mermaid
 flowchart LR
@@ -40,9 +77,34 @@ flowchart LR
     UI --> Local[Browser-only preferences and drafts]
 ```
 
+| Layer | Technology |
+| --- | --- |
+| Frontend | React 18, Vite, Tailwind CSS, React Router, React Hook Form + Zod, Recharts, Framer Motion, Three.js |
+| Backend | FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, SlowAPI rate limiting, ReportLab PDFs |
+| Security | Argon2 hashing, revocable DB-backed sessions, CSRF protection |
+| Delivery | GitHub Actions CI for backend tests, frontend tests and build |
+
+## 🗂️ Project structure
+
+```text
+├── backend/
+│   ├── api/          # routers and endpoints (auth, valuation, reports, health)
+│   ├── core/         # config, security, rate limiting
+│   ├── models/       # SQLAlchemy models
+│   ├── schemas/      # Pydantic schemas
+│   ├── services/     # valuation and report logic
+│   ├── alembic/      # database migrations
+│   └── tests/        # pytest suite
+├── frontend/src/
+│   ├── components/   # landing, valuation wizard, workspace tools, UI kit
+│   ├── pages/        # routes
+│   └── services/     # API client and financial calculations
+└── .github/workflows # CI
+```
+
 The valuation engine uses founder-entered figures and illustrative stage revenue multiples; it does not fetch or invent comparable-company data. Forecasts are scenario estimates, not verified actuals. The roadmap builder creates an editable draft in the current page session and does not persist roadmaps.
 
-## Get started
+## 🚀 Quick start
 
 ### Requirements
 
@@ -98,7 +160,7 @@ The backend reads environment variables (or a local `.env` file) from its workin
 
 For production, set `ENVIRONMENT=production`, `DEBUG=false`, and explicit HTTPS-only `CORS_ORIGINS`. Configure secret management, TLS, database access controls, backups, tested restoration, retention, monitoring, and shared rate limiting before accepting real customer data.
 
-## Routes and API
+## 🔌 API at a glance
 
 | Area | Route |
 | --- | --- |
@@ -133,7 +195,7 @@ Where inputs allow, the response also includes financial-health, growth, investo
 
 Financial planner and runway inputs, settings, readiness checklists, and roadmap drafts are not persisted to the backend. Currency settings change display formatting only; they do not convert values or change valuation calculations. Forecasts compound entered monthly revenue and total expenses by their respective monthly growth assumptions. Net cash flow is revenue minus operating expenses, payroll, marketing, and other costs; closing cash carries forward. Projections exclude taxes, financing changes, working capital, and seasonality.
 
-## Security and production limitations
+## 🔒 Security
 
 - Authentication uses Argon2 password hashes and opaque, revocable database-backed sessions. Session cookies are HttpOnly and SameSite Strict; state-changing authenticated requests require a CSRF token and trusted Origin.
 - New valuation reports are owner-scoped. Legacy records without an owner remain unowned and are not exposed in report history.
@@ -141,7 +203,7 @@ Financial planner and runway inputs, settings, readiness checklists, and roadmap
 - Email verification, password recovery, account deletion, organization isolation, production backups, and infrastructure provisioning are not included.
 - SQLite is the default local database. Review deployment security and data-retention requirements before using real customer data.
 
-## Tests
+## 🧪 Tests
 
 From the repository root:
 
@@ -155,3 +217,4 @@ npm run build
 ## License
 
 No license has been specified. Public repository visibility does not grant permission to reuse, distribute, or modify this project.
+
