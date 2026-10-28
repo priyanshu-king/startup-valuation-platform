@@ -6,7 +6,7 @@ Aggregates all versioned sub-routers.
 
 from fastapi import APIRouter
 
-from api.endpoints import auth, health, reports, valuation
+from routes.endpoints import auth, health, reports, valuation
 
 api_router = APIRouter()
 
@@ -23,7 +23,7 @@ api_router.include_router(
 )
 
 # ── Future feature routers ────────────────────────────────────────────────────
-# from api.endpoints import startups, reports, ai_analysis
+# from routes.endpoints import startups, reports, ai_analysis
 # api_router.include_router(startups.router,    prefix="/startups",   tags=["Startups"])
 # api_router.include_router(reports.router,     prefix="/reports",    tags=["Reports"])
 # api_router.include_router(ai_analysis.router, prefix="/ai",         tags=["AI Analysis"])

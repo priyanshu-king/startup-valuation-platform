@@ -243,51 +243,66 @@ npm run build
 
 ## 🚀 Deploy
 
-This is a full-stack app. The frontend runs on Vercel; the FastAPI backend needs a separate host (Vercel cannot run Python/SQLite).
+This repository is ready to deploy as a **single Vercel project**: Vercel builds the
+Vite frontend to static files and runs the FastAPI backend as a Python serverless
+function (`api/index.py`). Because both are served from the same origin, the browser
+calls `/api` directly — no CORS or `VITE_API_BASE_URL` configuration is required.
 
-### 1. Deploy the backend (Render, Railway, or Fly.io)
+Production needs a hosted PostgreSQL database (SQLite is local-only and is not
+persisted by serverless functions). Any Postgres provider works — Neon, Supabase,
+Vercel Postgres, Railway, etc.
 
-Create a new web service from the `backend/` folder:
+### Vercel project settings
 
 | Setting | Value |
 | --- | --- |
-| Runtime | Python 3.11 |
-| Build command | `pip install -r requirements.txt` |
-| Start command | `uvicorn main:app --host 0.0.0.0 --port $PORT` |
-| Root directory | `backend` |
+| Framework preset | Other |
+| Root directory | repository root |
+| Install command | `npm --prefix frontend ci` |
+| Build command | `npm --prefix frontend run build` |
+| Output directory | `frontend/dist` |
 
-Then run migrations once after deploy:
+These values are already committed in [`vercel.json`](vercel.json), together with the
+`/api/*` → Python function rewrite and the SPA fallback.
 
-```powershell
-python -m alembic upgrade head
+### Environment variables
+
+Set these in **Project → Settings → Environment Variables** (production and preview):
+
+| Variable | Example | Notes |
+| --- | --- | --- |
+| `ENVIRONMENT` | `production` | Required. Enables secure cookies and HSTS. |
+| `DEBUG` | `false` | Required. Production refuses to boot with debug on. |
+| `DATABASE_URL` | `postgresql://user:pass@host:5432/postgres` | Hosted Postgres URL. `postgres://` and `postgresql+asyncpg://` are normalised automatically. |
+| `CORS_ORIGINS` | `https://your-app.vercel.app` | Comma-separated, explicit HTTPS origins (the production deployment only). |
+
+SQLite remains the default when `DATABASE_URL` is unset, which keeps local
+development and the test suite unchanged.
+
+### First deploy
+
+1. Push the repository to GitHub.
+2. On [vercel.com](https://vercel.com), click **Add New → Project** and import this repository.
+3. Keep the root directory and the detected settings above, add the environment
+   variables, and click **Deploy**.
+4. Tables are created automatically on the first cold start (`Base.metadata.create_all`),
+   so no migration step is required for a fresh database. Alembic remains available for
+   schema evolution:
+
+   ```sh
+   cd backend && alembic upgrade head
+   ```
+
+### Verify the deployment
+
+```sh
+curl -i https://your-app.vercel.app/api/health
+curl -i https://your-app.vercel.app/api/docs
 ```
 
-Set these environment variables on the backend host:
-
-```
-ENVIRONMENT=production
-DEBUG=false
-SECRET_KEY=<long random string>
-CORS_ORIGINS=https://your-vercel-app.vercel.app
-```
-
-Take the backend URL (e.g. `https://startup-valuation-api.onrender.com`).
-
-### 2. Deploy the frontend on Vercel
-
-1. Push this repo to GitHub.
-2. On [vercel.com](https://vercel.com), click **Add New → Project** and import `priyanshu-king/startup-valuation-platform`.
-3. Set **Root Directory** to `frontend`.
-4. Framework preset: **Vite**.
-5. Build command: `npm ci && npm run build`
-6. Output directory: `dist`
-7. Add environment variable:
-   - `VITE_API_BASE_URL` = your backend URL from step 1 (e.g. `https://startup-valuation-api.onrender.com`)
-8. Click **Deploy**.
-
-### 3. Verify
-
-Open your Vercel URL and check `https://your-app.vercel.app/api/health` (proxied through your backend). If the health check returns OK, the frontend and backend are connected.
+- `GET /api/health` returns `{"status": "ok", ...}` when the function is live.
+- Register an account in the UI, run a valuation, and confirm it appears in **Reports** —
+  that round trip proves frontend → backend → PostgreSQL are all connected.
 
 ## License
 

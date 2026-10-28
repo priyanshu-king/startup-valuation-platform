@@ -9,7 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.dependencies import (
+from routes.dependencies import (
     CurrentSession,
     CurrentUser,
     SESSION_COOKIE,
