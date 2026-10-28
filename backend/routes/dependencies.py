@@ -55,8 +55,20 @@ async def require_csrf(
 
 async def require_trusted_origin(request: Request) -> None:
     origin = request.headers.get("origin")
-    if origin and origin not in settings.cors_origins_list:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Request origin is not allowed.")
+    if not origin:
+        return
+    if origin.rstrip("/") in {o.rstrip("/") for o in settings.cors_origins_list}:
+        return
+
+    # Same-origin requests are always trusted. This keeps preview deployments
+    # and custom domains working without listing every generated URL, while
+    # still rejecting requests that originate from another site.
+    host = request.headers.get("host", "")
+    same_origin = f"{request.url.scheme}://{host}"
+    if origin.rstrip("/") == same_origin.rstrip("/"):
+        return
+
+    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Request origin is not allowed.")
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
