@@ -1,0 +1,19 @@
+# Files that never need to be uploaded to Vercel.
+.git
+.github
+.venv
+venv
+.cline-home
+.vercel
+__pycache__
+*.pyc
+.pytest_cache
+frontend/node_modules
+frontend/dist
+data
+docs
+*.png
+*.png.png
+.env
+.env.*
+!.env.example

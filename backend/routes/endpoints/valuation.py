@@ -16,7 +16,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from api.dependencies import CurrentUser, require_csrf
+from routes.dependencies import CurrentUser, require_csrf
 from database.session import get_db
 from schemas.valuation import ValuationRequest, ValuationResponse, MethodResult
 from services.valuation_service import get_valuation_engine

@@ -9,7 +9,7 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.dependencies import CurrentUser, require_csrf
+from routes.dependencies import CurrentUser, require_csrf
 from database.session import get_db
 from models.security import User, ValuationReport
 from models.valuation import StartupProfile, ValuationResult

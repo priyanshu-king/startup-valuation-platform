@@ -13,10 +13,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from api.router import api_router
+from routes.router import api_router
 from core.config import settings
 from core.rate_limit import limiter
-from database.session import init_db
+from database.session import ensure_schema
 
 
 # ─── Lifespan ───────────────────────────────────────────────────────────────
@@ -26,8 +26,14 @@ async def lifespan(app: FastAPI):
     """Startup and shutdown logic for the FastAPI application."""
     # Startup
     print(f"🚀  Starting {settings.APP_NAME} v{settings.APP_VERSION}")
-    await init_db()
-    print("✅  Database initialised")
+    try:
+        await ensure_schema()
+        print("✅  Database initialised")
+    except Exception as exc:  # pragma: no cover - depends on remote DB
+        # Serverless cold starts should still serve /api/health so operators
+        # can see the deployment is reachable, while requests that need the
+        # database retry initialisation on demand.
+        print(f"⚠️   Database initialisation deferred: {exc}")
     yield
     # Shutdown
     print("🛑  Shutting down…")
